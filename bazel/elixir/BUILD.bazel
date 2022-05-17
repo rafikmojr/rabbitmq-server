@@ -1,0 +1,38 @@
+load(
+    ":elixir_build.bzl",
+    "elixir_external",
+)
+load(
+    ":elixir_toolchain.bzl",
+    "elixir_toolchain",
+)
+load(
+    ":elixir_as_app.bzl",
+    "elixir_as_app",
+)
+
+toolchain_type(
+    name = "toolchain_type",
+    visibility = ["//visibility:public"],
+)
+
+elixir_external(
+    name = "external_elixir_installation_ref",
+)
+
+elixir_toolchain(
+    name = "elixir_external",
+    elixir = ":external_elixir_installation_ref",
+)
+
+toolchain(
+    name = "elixir_external_toolchain",
+    toolchain = ":elixir_external",
+    toolchain_type = ":toolchain_type",
+    visibility = ["//visibility:public"],
+)
+
+elixir_as_app(
+    name = "erlang_app",
+    visibility = ["//visibility:public"],
+)

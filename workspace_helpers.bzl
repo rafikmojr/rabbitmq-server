@@ -3,9 +3,15 @@ load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository", "new_git_r
 load("@rules_erlang//:github.bzl", "github_erlang_app")
 load("@rules_erlang//:hex_archive.bzl", "hex_archive")
 load("@rules_erlang//:hex_pm.bzl", "hex_pm_erlang_app")
-load("//:rabbitmq.bzl", "APP_VERSION")
+load("//bazel/bzlmod:extensions.bzl", "ELIXIR_BUILD_FILE_CONTENT")
 
 def rabbitmq_external_deps(rabbitmq_workspace = "@rabbitmq-server"):
+    elixir(
+        version = "1.12.2",
+        sha256 = "32bf6f603156677b06e2d9faf2bf6b0d954b60440600ad7b64e1b5de49065196",
+        rabbitmq_workspace = rabbitmq_workspace,
+    )
+
     hex_pm_erlang_app(
         name = "accept",
         version = "0.3.5",
@@ -131,9 +137,6 @@ erlang_app(
         org = "potatosalad",
         ref = "2b1d66b5f4fbe33cb198149a8cb23895a2c877ea",
         version = "2b1d66b5f4fbe33cb198149a8cb23895a2c877ea",
-        first_srcs = [
-            "src/jose_block_encryptor.erl",
-        ],
         sha256 = "7816f39d00655f2605cfac180755e97e268dba86c2f71037998ff63792ca727b",
     )
 
@@ -248,6 +251,21 @@ erlang_app(
         remote = "https://github.com/rabbitmq/trust-store-http.git",
         branch = "master",
         build_file = rabbitmq_workspace + "//:BUILD.trust_store_http",
+    )
+
+def elixir(
+        version = None,
+        sha256 = None,
+        rabbitmq_workspace = "@rabbitmq-server"):
+    http_archive(
+        name = "elixir_{}".format(version),
+        url = "https://github.com/elixir-lang/elixir/archive/refs/tags/v{}.zip".format(version),
+        strip_prefix = "elixir-{}".format(version),
+        sha256 = sha256,
+        build_file_content = ELIXIR_BUILD_FILE_CONTENT,
+        repo_mapping = {
+            "@rabbitmq-server": rabbitmq_workspace,
+        },
     )
 
 RA_INJECT_GIT_VERSION = """

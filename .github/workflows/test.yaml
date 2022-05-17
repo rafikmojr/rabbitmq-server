@@ -32,6 +32,14 @@ jobs:
         erlang_version:
         - "23"
         - "24"
+        - "25"
+        include:
+        - erlang_version: "23"
+          elixir_version: 1.10.4
+        - erlang_version: "24"
+          elixir_version: 1.13.4
+        - erlang_version: "25"
+          elixir_version: 1.13.4
     timeout-minutes: 120
     steps:
     - name: CHECKOUT REPOSITORY
@@ -55,6 +63,9 @@ jobs:
           build:buildbuddy --repository_cache=/home/runner/repo-cache/
           build:buildbuddy --color=yes
           build:buildbuddy --disk_cache=
+
+          build --extra_toolchains=@otp_${{ matrix.erlang_version }}//:erlang_toolchain
+          build --extra_toolchains=@elixir_${{ matrix.elixir_version }}//:elixir_toolchain
         EOF
 
         bazelisk info release
@@ -65,7 +76,7 @@ jobs:
         sudo sysctl -w net.ipv4.tcp_keepalive_time=60
         sudo ethtool -K eth0 tso off gso off gro off tx off rx off lro off
         bazelisk test //... \
-          --config=rbe-${{ matrix.erlang_version }} \
+          --config=rbe \
           --test_tag_filters=-exclusive,-aws,-mixed-version-cluster \
           --verbose_failures
   test-exclusive:
@@ -77,15 +88,18 @@ jobs:
         erlang_version:
         - "23"
         - "24"
+        - "25"
+        include:
+        - erlang_version: "23"
+          elixir_version: 1.10.4
+        - erlang_version: "24"
+          elixir_version: 1.13.4
+        - erlang_version: "25"
+          elixir_version: 1.13.4
     timeout-minutes: 60
     steps:
     - name: CHECKOUT REPOSITORY
       uses: actions/checkout@v3
-    - name: CONFIGURE OTP & ELIXIR
-      uses: erlef/setup-beam@v1.11
-      with:
-        otp-version: ${{ matrix.erlang_version }}
-        elixir-version: 1.11.4
     - name: MOUNT BAZEL CACHE
       uses: actions/cache@v3.0.3
       with:
@@ -93,8 +107,6 @@ jobs:
         key: repo-cache
     - name: CONFIGURE BAZEL
       run: |
-        ERLANG_HOME="$(dirname $(dirname $(which erl)))"
-        ELIXIR_HOME="$(dirname $(dirname $(which iex)))"
         if [ -n "${{ secrets.BUILDBUDDY_API_KEY }}" ]; then
         cat << EOF >> user.bazelrc
           build:buildbuddy --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }}
@@ -108,9 +120,8 @@ jobs:
           build:buildbuddy --color=yes
           build:buildbuddy --disk_cache=
 
-          build --@rules_erlang//:erlang_version=${{ matrix.erlang_version }}
-          build --@rules_erlang//:erlang_home=${ERLANG_HOME}
-          build --//:elixir_home=${ELIXIR_HOME}
+          build --extra_toolchains=@otp_${{ matrix.erlang_version }}//:erlang_toolchain
+          build --extra_toolchains=@elixir_${{ matrix.elixir_version }}//:elixir_toolchain
         EOF
     #! - name: Setup tmate session
     #!   uses: mxschmitt/action-tmate@v3
