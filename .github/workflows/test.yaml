@@ -30,8 +30,8 @@ jobs:
       fail-fast: false
       matrix:
         erlang_version:
-        - "23"
-        - "24"
+        #! - "23"
+        #! - "24"
         - "25"
         include:
         - erlang_version: "23"

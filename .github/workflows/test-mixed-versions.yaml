@@ -31,7 +31,7 @@ jobs:
       matrix:
         erlang_version:
         - "24"
-        - "25"
+        #! - "25"
         include:
         - erlang_version: "24"
           elixir_version: 1.13.4
