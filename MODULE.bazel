@@ -8,7 +8,7 @@ bazel_dep(name = "rules_erlang", version = "3.0.0")
 git_override(
     module_name = "rules_erlang",
     remote = "https://github.com/rabbitmq/rules_erlang.git",
-    commit = "74840235f9b3a0dad51070d051b1830fbd0b6a68", # <- internal-erlang-with-platforms branch
+    commit = "575e1740aaedcf3d2319af03f0bc2ef756f2dbb1", # <- internal-erlang-with-platforms branch
 )
 
 erlang_package = use_extension(
@@ -19,6 +19,10 @@ erlang_package = use_extension(
 erlang_package.otp_github_release(
     version = "23.3.4.14",
     sha256 = "35123f366ded534775a05db8ad6c06c20519ae228af1b5952132b10845621f21",
+    extra_configure_opts = [
+        "--disable-hipe",
+        "--without-hipe",
+    ],
 )
 
 erlang_package.otp_github_release(
@@ -311,7 +315,7 @@ elixir = use_extension(
 
 elixir.elixir_github_release(
     version = "1.10.4",
-    # sha256 = "32bf6f603156677b06e2d9faf2bf6b0d954b60440600ad7b64e1b5de49065196",
+    sha256 = "940387e4f9d27669c454b31a888b0944f4ecc5a41284dd4d49252d30a5b7680b",
 )
 
 elixir.elixir_github_release(
