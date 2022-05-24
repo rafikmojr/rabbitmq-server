@@ -73,7 +73,7 @@ jobs:
 
       - name: Check for otp version match
         run: |
-          bazelisk build :otp_version
+          bazelisk build :otp_version --config=rbe
           if [ ! "$(cat bazel-bin/actual_version.txt)" == "${{ steps.load-info.outputs.otp }}" ]; then
             exit 1
           fi
