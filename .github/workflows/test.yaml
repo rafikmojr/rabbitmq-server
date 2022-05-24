@@ -34,10 +34,10 @@ jobs:
         #! - "24"
         - "25"
         include:
-        - erlang_version: "23"
-          elixir_version: 1.10.4
-        - erlang_version: "24"
-          elixir_version: 1.13.4
+        #! - erlang_version: "23"
+        #!   elixir_version: 1.10.4
+        #! - erlang_version: "24"
+        #!   elixir_version: 1.13.4
         - erlang_version: "25"
           elixir_version: 1.13.4
     timeout-minutes: 120
@@ -86,14 +86,14 @@ jobs:
       fail-fast: false
       matrix:
         erlang_version:
-        - "23"
-        - "24"
+        #! - "23"
+        #! - "24"
         - "25"
         include:
-        - erlang_version: "23"
-          elixir_version: 1.10.4
-        - erlang_version: "24"
-          elixir_version: 1.13.4
+        #! - erlang_version: "23"
+        #!   elixir_version: 1.10.4
+        #! - erlang_version: "24"
+        #!   elixir_version: 1.13.4
         - erlang_version: "25"
           elixir_version: 1.13.4
     timeout-minutes: 60
