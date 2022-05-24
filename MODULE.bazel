@@ -297,6 +297,7 @@ use_repo(
     "osiris",
     "prometheus",
     "proper",
+    "ra",
     "ranch",
     "recon",
     "redbug",
