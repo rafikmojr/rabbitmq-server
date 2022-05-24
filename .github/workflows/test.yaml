@@ -100,6 +100,11 @@ jobs:
     steps:
     - name: CHECKOUT REPOSITORY
       uses: actions/checkout@v3
+    - name: CONFIGURE OTP & ELIXIR
+      uses: erlef/setup-beam@v1.11
+      with:
+        otp-version: ${{ matrix.erlang_version }}
+        elixir-version: ${{ matrix.elixir_version }}
     - name: MOUNT BAZEL CACHE
       uses: actions/cache@v3.0.3
       with:
@@ -107,6 +112,8 @@ jobs:
         key: repo-cache
     - name: CONFIGURE BAZEL
       run: |
+        ERLANG_HOME="$(dirname $(dirname $(which erl)))"
+        ELIXIR_HOME="$(dirname $(dirname $(which iex)))"
         if [ -n "${{ secrets.BUILDBUDDY_API_KEY }}" ]; then
         cat << EOF >> user.bazelrc
           build:buildbuddy --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }}
@@ -120,8 +127,11 @@ jobs:
           build:buildbuddy --color=yes
           build:buildbuddy --disk_cache=
 
-          build --extra_toolchains=@otp_${{ matrix.erlang_version }}//:erlang_toolchain
-          build --extra_toolchains=@elixir_${{ matrix.elixir_version }}//:elixir_toolchain
+          build --@rules_erlang//:erlang_version=${{ matrix.erlang_version }}
+          build --@rules_erlang//:erlang_home=${ERLANG_HOME}
+          build --//:elixir_home=${ELIXIR_HOME}
+          build --extra_toolchains=@rules_erlang//tools:erlang_external_toolchain
+          build --extra_toolchains=//bazel/elixir:elixir_external_toolchain
         EOF
     #! - name: Setup tmate session
     #!   uses: mxschmitt/action-tmate@v3
