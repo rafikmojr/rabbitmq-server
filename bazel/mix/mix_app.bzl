@@ -82,8 +82,12 @@ export ERL_COMPILER_OPTIONS=deterministic
 ${{ABS_ELIXIR_HOME}}/bin/mix local.hex --force
 ${{ABS_ELIXIR_HOME}}/bin/mix compile --no-deps-check
 
-cp ${{MIX_BUILD_PATH}}/lib/{app_name}/consolidated/* ${{ABS_EBIN_DIR}}
-cp ${{MIX_BUILD_PATH}}/lib/{app_name}/ebin/* ${{ABS_EBIN_DIR}}
+if [ -n "$(ls ${{MIX_BUILD_PATH}}/lib/{app_name}/consolidated)" ]; then
+    cp ${{MIX_BUILD_PATH}}/lib/{app_name}/consolidated/* ${{ABS_EBIN_DIR}}
+fi
+if [ -n "$(ls ${{MIX_BUILD_PATH}}/lib/{app_name}/ebin)" ]; then
+    cp ${{MIX_BUILD_PATH}}/lib/{app_name}/ebin/* ${{ABS_EBIN_DIR}}
+fi
 
 # remove symlinks from the _build directory since it
 # is not used, and bazel does not allow them

@@ -63,8 +63,6 @@ ln -s ${{PWD}}/{package_dir}/mix.exs ${{TEST_UNDECLARED_OUTPUTS_DIR}}
 INITIAL_DIR=${{PWD}}
 cd ${{TEST_UNDECLARED_OUTPUTS_DIR}}
 
-set -x
-
 export ERL_COMPILER_OPTIONS=deterministic
 "${{ABS_ELIXIR_HOME}}"/bin/mix local.hex --force
 # "${{ABS_ELIXIR_HOME}}"/bin/mix deps.get dialyxir

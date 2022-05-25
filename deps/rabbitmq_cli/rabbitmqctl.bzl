@@ -72,8 +72,12 @@ export ERL_COMPILER_OPTIONS=deterministic
 "${{ABS_ELIXIR_HOME}}"/bin/mix escript.build --no-deps-check
 
 mv escript/rabbitmqctl ${{ABS_ESCRIPT_PATH}}
-cp ${{MIX_BUILD_PATH}}/lib/{app_name}/consolidated/* ${{ABS_EBIN_DIR}}
-cp ${{MIX_BUILD_PATH}}/lib/{app_name}/ebin/* ${{ABS_EBIN_DIR}}
+if [ -n "$(ls ${{MIX_BUILD_PATH}}/lib/{app_name}/consolidated)" ]; then
+    cp ${{MIX_BUILD_PATH}}/lib/{app_name}/consolidated/* ${{ABS_EBIN_DIR}}
+fi
+if [ -n "$(ls ${{MIX_BUILD_PATH}}/lib/{app_name}/ebin)" ]; then
+    cp ${{MIX_BUILD_PATH}}/lib/{app_name}/ebin/* ${{ABS_EBIN_DIR}}
+fi
 """.format(
         maybe_symlink_erlang = maybe_symlink_erlang(ctx),
         erlang_home = erlang_home,
