@@ -29,15 +29,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        erlang_version:
-        #! - "23"
-        #! - "24"
-        - "25"
         include:
         #! - erlang_version: "23"
         #!   elixir_version: 1.10.4
-        #! - erlang_version: "24"
-        #!   elixir_version: 1.13.4
+        - erlang_version: "24"
+          elixir_version: 1.13.4
         - erlang_version: "25"
           elixir_version: 1.13.4
     timeout-minutes: 120
@@ -59,7 +55,6 @@ jobs:
         cat << EOF >> user.bazelrc
           build:buildbuddy --build_metadata=ROLE=CI
           build:buildbuddy --build_metadata=VISIBILITY=PUBLIC
-          build:buildbuddy --remote_instance_name=buildbuddy-io/buildbuddy/ci-${{ matrix.erlang_version }}
           build:buildbuddy --repository_cache=/home/runner/repo-cache/
           build:buildbuddy --color=yes
           build:buildbuddy --disk_cache=
@@ -85,15 +80,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        erlang_version:
-        #! - "23"
-        #! - "24"
-        - "25"
         include:
         #! - erlang_version: "23"
         #!   elixir_version: 1.10.4
-        #! - erlang_version: "24"
-        #!   elixir_version: 1.13.4
+        - erlang_version: "24"
+          elixir_version: 1.13.4
         - erlang_version: "25"
           elixir_version: 1.13.4
     timeout-minutes: 60
@@ -122,7 +113,6 @@ jobs:
         cat << EOF >> user.bazelrc
           build:buildbuddy --build_metadata=ROLE=CI
           build:buildbuddy --build_metadata=VISIBILITY=PRIVATE
-          build:buildbuddy --remote_instance_name=buildbuddy-io/buildbuddy/ci-exclusive-${{ matrix.erlang_version }}
           build:buildbuddy --repository_cache=/home/runner/repo-cache/
           build:buildbuddy --color=yes
           build:buildbuddy --disk_cache=
