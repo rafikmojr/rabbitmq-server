@@ -8,37 +8,12 @@ bazel_dep(name = "rules_erlang", version = "3.0.0")
 git_override(
     module_name = "rules_erlang",
     remote = "https://github.com/rabbitmq/rules_erlang.git",
-    commit = "0c1fa873ecc83c3acfc80ad1d8f712b648c58704", # <- internal-erlang-with-platforms branch
+    commit = "e52d40a883dde08b5a0325e0d224734e31a4dee7", # <- internal-erlang-with-platforms branch
 )
 
 erlang_package = use_extension(
     "@rules_erlang//bzlmod:extensions.bzl",
     "erlang_package",
-)
-
-erlang_package.otp_github_release(
-    version = "23.3.4.14",
-    sha256 = "35123f366ded534775a05db8ad6c06c20519ae228af1b5952132b10845621f21",
-    extra_configure_opts = [
-        "--disable-hipe",
-        "--without-hipe",
-    ],
-)
-
-erlang_package.otp_github_release(
-    version = "24.3.4",
-    sha256 = "76fcca5ba6f11eb9caac32bf053badc46b5d66f867150eef077f4f0d7944ecd7",
-)
-
-erlang_package.otp_github_release(
-    version = "25.0",
-    sha256 = "2d7678c9bc6fcf3a1242c4d1c3864855d85e73ade792cd80adb8a9f379996711",
-)
-
-erlang_package.otp_http_archive(
-    name = "otp_git_master",
-    url = "https://github.com/erlang/otp/archive/refs/heads/master.zip",
-    strip_prefix = "otp-master",
 )
 
 erlang_package.hex_package(
@@ -280,10 +255,6 @@ erlang_package.git_package(
 
 use_repo(
     erlang_package,
-    "otp_23",
-    "otp_24",
-    "otp_25",
-    "otp_git_master",
     "accept",
     "aten",
     "base64url",
@@ -319,16 +290,6 @@ use_repo(
 elixir = use_extension(
     "//bazel/bzlmod:extensions.bzl",
     "elixir",
-)
-
-elixir.elixir_github_release(
-    version = "1.10.4",
-    sha256 = "940387e4f9d27669c454b31a888b0944f4ecc5a41284dd4d49252d30a5b7680b",
-)
-
-elixir.elixir_github_release(
-    version = "1.13.4",
-    sha256 = "b7f5f38c049084cd30852f6990e478862f156e53aee748f9d9a421521afca940",
 )
 
 elixir.hex_package(
@@ -375,8 +336,6 @@ elixir.hex_package(
 
 use_repo(
     elixir,
-    "elixir_1.10.4",
-    "elixir_1.13.4",
     "amqp",
     "csv",
     "json",

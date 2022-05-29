@@ -24,26 +24,24 @@ build:rbe --crosstool_top=@rbe//cc:toolchain
 build:rbe --extra_toolchains=@rbe//config:cc-toolchain
 
 build:rbe --host_platform=@rbe//config:platform
-build:rbe --platforms=@rbe//config:platform
-build:rbe --extra_execution_platforms=@rbe//config:platform
 
 build:rbe --host_cpu=k8
 build:rbe --cpu=k8
 
 build:rbe-23 --config=rbe
-build:rbe-23 --extra_toolchains=@otp_23//:erlang_toolchain
-build:rbe-23 --extra_toolchains=@elixir_1.10.4//:elixir_toolchain
+build:rbe-23 --platforms=//bazel/platforms:erlang_23_platform
+build:rbe-23 --extra_execution_platforms=//bazel/platforms:erlang_23_platform
 
 build:rbe-24 --config=rbe
-build:rbe-24 --extra_toolchains=@otp_24//:erlang_toolchain
-build:rbe-24 --extra_toolchains=@elixir_1.13.4//:elixir_toolchain
+build:rbe-24 --platforms=//bazel/platforms:erlang_24_platform
+build:rbe-24 --extra_execution_platforms=//bazel/platforms:erlang_24_platform
 
 build:rbe-25 --config=rbe
-build:rbe-25 --extra_toolchains=@otp_25//:erlang_toolchain
-build:rbe-25 --extra_toolchains=@elixir_1.13.4//:elixir_toolchain
+build:rbe-25 --platforms=//bazel/platforms:erlang_25_platform
+build:rbe-25 --extra_execution_platforms=//bazel/platforms:erlang_25_platform
 
-build:local --extra_toolchains=@rules_erlang//tools:erlang_external_toolchain
-build:local --extra_toolchains=//bazel/elixir:elixir_external_toolchain
+build:local --platforms=@rules_erlang//:erlang_external_platform
+build:local --extra_execution_platforms=@rules_erlang//:erlang_external_platform
 
 # Try importing a user specific .bazelrc
 # You can create your own by copying and editing the template-user.bazelrc template:

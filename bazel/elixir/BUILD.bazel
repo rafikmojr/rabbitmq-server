@@ -27,6 +27,12 @@ elixir_toolchain(
 
 toolchain(
     name = "elixir_external_toolchain",
+    exec_compatible_with = [
+        "//bazel/platforms:elixir_external",
+    ],
+    target_compatible_with = [
+        "//bazel/platforms:elixir_external",
+    ],
     toolchain = ":elixir_external",
     toolchain_type = ":toolchain_type",
     visibility = ["//visibility:public"],

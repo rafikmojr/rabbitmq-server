@@ -54,28 +54,26 @@ git_repository(
 
 git_repository(
     name = "rules_erlang",
-    commit = "0c1fa873ecc83c3acfc80ad1d8f712b648c58704",
+    commit = "e52d40a883dde08b5a0325e0d224734e31a4dee7",
     remote = "https://github.com/rabbitmq/rules_erlang.git",
 )
 
 load(
     "@rules_erlang//:rules_erlang.bzl",
-    "otp_github_release",
     "rules_erlang_dependencies",
 )
 
 rules_erlang_dependencies()
 
-otp_github_release(
-    name = "otp_23",
-    sha256 = "35123f366ded534775a05db8ad6c06c20519ae228af1b5952132b10845621f21",
-    version = "23.3.4.14",
-)
-
-otp_github_release(
-    name = "otp_24",
-    sha256 = "76fcca5ba6f11eb9caac32bf053badc46b5d66f867150eef077f4f0d7944ecd7",
-    version = "24.3.4",
+register_toolchains(
+    "@rules_erlang//tools:erlang_external_toolchain",
+    "//bazel/toolchains:erlang_toolchain_23",
+    "//bazel/toolchains:erlang_toolchain_24",
+    "//bazel/toolchains:erlang_toolchain_25",
+    "//bazel/toolchains:erlang_toolchain_git_master",
+    "//bazel/elixir:elixir_external_toolchain",
+    "//bazel/toolchains:elixir_toolchain_1_10",
+    "//bazel/toolchains:elixir_toolchain_1_13",
 )
 
 load("//:workspace_helpers.bzl", "rabbitmq_external_deps")
