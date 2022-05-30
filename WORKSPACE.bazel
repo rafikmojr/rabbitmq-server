@@ -54,7 +54,7 @@ git_repository(
 
 git_repository(
     name = "rules_erlang",
-    commit = "3878f5919f605301c948e1e294fb08c15374269b",
+    commit = "4a0efcaa1bd9da0e96154aad6620404b9fac5206",
     remote = "https://github.com/rabbitmq/rules_erlang.git",
 )
 
@@ -66,12 +66,12 @@ load(
 rules_erlang_dependencies()
 
 register_toolchains(
-    "@rules_erlang//tools:erlang_external_toolchain",
+    "//bazel/toolchains:erlang_toolchain_external",
     "//bazel/toolchains:erlang_toolchain_23",
     "//bazel/toolchains:erlang_toolchain_24",
     "//bazel/toolchains:erlang_toolchain_25",
     "//bazel/toolchains:erlang_toolchain_git_master",
-    "//bazel/toolchains:elixir_external_toolchain",
+    "//bazel/toolchains:elixir_toolchain_external",
     "//bazel/toolchains:elixir_toolchain_1_10",
     "//bazel/toolchains:elixir_toolchain_1_13",
 )

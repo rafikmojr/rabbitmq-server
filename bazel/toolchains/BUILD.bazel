@@ -1,5 +1,6 @@
 load(
     "@rules_erlang//tools:erlang.bzl",
+    "erlang_toolchain_external",
     "erlang_toolchain_from_github_release",
     "erlang_toolchain_from_http_archive",
 )
@@ -8,6 +9,8 @@ load(
     "elixir_toolchain_external",
     "elixir_toolchain_from_github_release",
 )
+
+erlang_toolchain_external()
 
 erlang_toolchain_from_github_release(
     extra_configure_opts = [

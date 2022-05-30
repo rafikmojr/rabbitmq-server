@@ -9,11 +9,12 @@ load(
 )
 
 def elixir_toolchain_external():
+    elixir_constraint = Label("//bazel/platforms:elixir_external")
+
     elixir_external(
         name = "external_elixir_installation_ref",
         target_compatible_with = [
-            "@rules_erlang//platforms:erlang_external",
-            "//bazel/platforms:elixir_external",
+            elixir_constraint,
         ],
     )
 
@@ -23,17 +24,19 @@ def elixir_toolchain_external():
     )
 
     native.toolchain(
-        name = "elixir_external_toolchain",
-        # exec_compatible_with = [
-        #     "//bazel/platforms:elixir_external",
-        # ],
+        name = "elixir_toolchain_external",
+        exec_compatible_with = [
+            elixir_constraint,
+        ],
         target_compatible_with = [
-            "//bazel/platforms:elixir_external",
+            elixir_constraint,
         ],
         toolchain = ":elixir_external",
         toolchain_type = Label("@rabbitmq-server//bazel/elixir:toolchain_type"),
         visibility = ["//visibility:public"],
     )
+
+    return elixir_constraint
 
 def elixir_toolchain_from_http_archive(
         name_suffix = "",
@@ -59,6 +62,9 @@ def elixir_toolchain_from_http_archive(
 
     native.toolchain(
         name = "elixir_toolchain{}".format(name_suffix),
+        exec_compatible_with = [
+            elixir_constraint,
+        ],
         target_compatible_with = [
             elixir_constraint,
         ],
@@ -81,3 +87,4 @@ def elixir_toolchain_from_github_release(
         sha256 = sha256,
         elixir_constraint = elixir_constraint,
     )
+    return elixir_constraint

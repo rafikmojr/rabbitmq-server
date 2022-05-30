@@ -8,7 +8,7 @@ bazel_dep(name = "rules_erlang", version = "3.0.0")
 git_override(
     module_name = "rules_erlang",
     remote = "https://github.com/rabbitmq/rules_erlang.git",
-    commit = "3878f5919f605301c948e1e294fb08c15374269b", # <- internal-erlang-with-platforms branch
+    commit = "4a0efcaa1bd9da0e96154aad6620404b9fac5206", # <- internal-erlang-with-platforms branch
 )
 
 erlang_package = use_extension(
