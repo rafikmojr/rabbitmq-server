@@ -10,7 +10,11 @@ load(
 
 ElixirInfo = provider(
     doc = "A Home directory of a built Elixir",
-    fields = ["release_dir", "elixir_home"],
+    fields = [
+        "release_dir",
+        "elixir_home",
+        "version_file",
+    ],
 )
 
 def _impl(ctx):
@@ -19,6 +23,8 @@ def _impl(ctx):
 
     release_dir = ctx.actions.declare_directory(ctx.label.name + "_release")
     build_dir = ctx.actions.declare_directory(ctx.label.name + "_build")
+
+    version_file = ctx.actions.declare_file(ctx.label.name + "_version")
 
     ctx.actions.run_shell(
         inputs = [],
@@ -52,7 +58,7 @@ fi
 
     ctx.actions.run_shell(
         inputs = inputs,
-        outputs = [release_dir, build_dir],
+        outputs = [release_dir, build_dir, version_file],
         command = """set -euo pipefail
 
 {maybe_symlink_erlang}
@@ -61,6 +67,7 @@ export PATH="{erlang_home}"/bin:${{PATH}}
 
 ABS_BUILD_DIR=$PWD/{build_path}
 ABS_RELEASE_DIR=$PWD/{release_path}
+ABS_VERSION_FILE=$PWD/{version_file}
 
 tar --extract \\
     --transform 's/{strip_prefix}//' \\
@@ -73,6 +80,8 @@ make
 
 cp -r bin $ABS_RELEASE_DIR/
 cp -r lib $ABS_RELEASE_DIR/
+
+$ABS_RELEASE_DIR/bin/iex --version > $ABS_VERSION_FILE
 """.format(
             maybe_symlink_erlang = maybe_symlink_erlang(ctx),
             erlang_home = erlang_home,
@@ -80,6 +89,7 @@ cp -r lib $ABS_RELEASE_DIR/
             strip_prefix = strip_prefix,
             build_path = build_dir.path,
             release_path = release_dir.path,
+            version_file = version_file.path,
         ),
         mnemonic = "ELIXIR",
         progress_message = "Compiling elixir from source",
@@ -87,12 +97,16 @@ cp -r lib $ABS_RELEASE_DIR/
 
     return [
         DefaultInfo(
-            files = depset([release_dir]),
+            files = depset([
+                release_dir,
+                version_file,
+            ]),
         ),
         ctx.toolchains["@rules_erlang//tools:toolchain_type"].otpinfo,
         ElixirInfo(
             release_dir = release_dir,
             elixir_home = None,
+            version_file = version_file,
         ),
     ]
 
@@ -109,21 +123,17 @@ elixir_build = rule(
 def _elixir_external_impl(ctx):
     elixir_home = ctx.attr._elixir_home[BuildSettingInfo].value
 
-    status_file = ctx.actions.declare_file(ctx.label.name + "_status")
+    version_file = ctx.actions.declare_file(ctx.label.name + "_version")
 
     ctx.actions.run_shell(
         inputs = [],
-        outputs = [status_file],
+        outputs = [version_file],
         command = """set -euo pipefail
 
-if [ -n "{elixir_home}" ]; then
-    "{elixir_home}"/bin/iex --version >> {status_path}
-else
-    echo "none" >> {status_path}
-fi
+"{elixir_home}"/bin/iex --version > {version_file}
 """.format(
             elixir_home = elixir_home,
-            status_path = status_file.path,
+            version_file = version_file.path,
         ),
         mnemonic = "ELIXIR",
         progress_message = "Validating elixir at {}".format(elixir_home),
@@ -131,12 +141,13 @@ fi
 
     return [
         DefaultInfo(
-            files = depset([status_file]),
+            files = depset([version_file]),
         ),
         ctx.toolchains["@rules_erlang//tools:toolchain_type"].otpinfo,
         ElixirInfo(
             release_dir = None,
             elixir_home = elixir_home,
+            version_file = version_file,
         ),
     ]
 

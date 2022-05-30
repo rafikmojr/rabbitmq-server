@@ -44,10 +44,10 @@ def erlang_dirs(ctx):
 def elixir_dirs(ctx, short_path = False):
     info = ctx.toolchains[":toolchain_type"].elixirinfo
     if info.elixir_home != None:
-        return (info.elixir_home, ctx.runfiles())
+        return (info.elixir_home, ctx.runfiles([info.version_file]))
     else:
         p = info.release_dir.short_path if short_path else info.release_dir.path
-        return (p, ctx.runfiles([info.release_dir]))
+        return (p, ctx.runfiles([info.release_dir, info.version_file]))
 
 def maybe_symlink_erlang(ctx, short_path = False):
     info = _build_info(ctx)
