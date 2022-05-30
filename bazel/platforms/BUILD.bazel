@@ -4,7 +4,7 @@ package(
 
 constraint_value(
     name = "erlang_git_master",
-    constraint_setting = "@rules_erlang//:erlang_major_version",
+    constraint_setting = "@rules_erlang//platforms:erlang_major_version",
 )
 
 constraint_setting(
@@ -29,7 +29,7 @@ constraint_value(
 platform(
     name = "erlang_external_platform",
     constraint_values = [
-        "@rules_erlang//:erlang_external",
+        "@rules_erlang//platforms:erlang_external",
         ":elixir_external",
     ],
     parents = ["@rbe//config:platform"],
@@ -38,7 +38,7 @@ platform(
 platform(
     name = "erlang_23_platform",
     constraint_values = [
-        "@rules_erlang//:erlang_23",
+        "@rules_erlang//platforms:erlang_23",
         ":elixir_1_10",
     ],
     parents = ["@rbe//config:platform"],
@@ -47,7 +47,7 @@ platform(
 platform(
     name = "erlang_24_platform",
     constraint_values = [
-        "@rules_erlang//:erlang_24",
+        "@rules_erlang//platforms:erlang_24",
         ":elixir_1_13",
     ],
     parents = ["@rbe//config:platform"],
@@ -56,7 +56,7 @@ platform(
 platform(
     name = "erlang_25_platform",
     constraint_values = [
-        "@rules_erlang//:erlang_25",
+        "@rules_erlang//platforms:erlang_25",
         ":elixir_1_13",
     ],
     parents = ["@rbe//config:platform"],

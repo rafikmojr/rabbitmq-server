@@ -1,11 +1,39 @@
 load(
     ":elixir_build.bzl",
     "elixir_build",
+    "elixir_external",
 )
 load(
     ":elixir_toolchain.bzl",
     "elixir_toolchain",
 )
+
+def elixir_toolchain_external():
+    elixir_external(
+        name = "external_elixir_installation_ref",
+        target_compatible_with = [
+            "@rules_erlang//platforms:erlang_external",
+            "//bazel/platforms:elixir_external",
+        ],
+    )
+
+    elixir_toolchain(
+        name = "elixir_external",
+        elixir = ":external_elixir_installation_ref",
+    )
+
+    native.toolchain(
+        name = "elixir_external_toolchain",
+        # exec_compatible_with = [
+        #     "//bazel/platforms:elixir_external",
+        # ],
+        target_compatible_with = [
+            "//bazel/platforms:elixir_external",
+        ],
+        toolchain = ":elixir_external",
+        toolchain_type = Label("@rabbitmq-server//bazel/elixir:toolchain_type"),
+        visibility = ["//visibility:public"],
+    )
 
 def elixir_toolchain_from_http_archive(
         name_suffix = "",

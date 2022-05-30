@@ -29,11 +29,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-        - erlang_version: "24"
-          elixir_version: 1.13.4
-        #! - erlang_version: "25"
-        #!   elixir_version: 1.13.4
+        erlang_major:
+        - "24"
+        #! - "25"
     timeout-minutes: 120
     steps:
     - name: CHECKOUT REPOSITORY
@@ -56,9 +54,6 @@ jobs:
           build:buildbuddy --repository_cache=/home/runner/repo-cache/
           build:buildbuddy --color=yes
           build:buildbuddy --disk_cache=
-
-          build --extra_toolchains=@otp_${{ matrix.erlang_version }}//:erlang_toolchain
-          build --extra_toolchains=@elixir_${{ matrix.elixir_version }}//:elixir_toolchain
         EOF
     #! - name: Setup tmate session
     #!   uses: mxschmitt/action-tmate@v3
@@ -67,7 +62,7 @@ jobs:
         sudo sysctl -w net.ipv4.tcp_keepalive_time=60
         sudo ethtool -K eth0 tso off gso off gro off tx off rx off lro off
         bazelisk test //... \
-          --config=rbe \
+          --config=rbe-${{ matrix.erlang_major }} \
           --test_tag_filters=mixed-version-cluster,-exclusive,-aws \
           --verbose_failures
   test-exclusive-mixed-versions:
@@ -113,8 +108,8 @@ jobs:
           build --@rules_erlang//:erlang_version=${{ matrix.erlang_version }}
           build --@rules_erlang//:erlang_home=${ERLANG_HOME}
           build --//:elixir_home=${ELIXIR_HOME}
-          build --extra_toolchains=@rules_erlang//tools:erlang_external_toolchain
-          build --extra_toolchains=//bazel/elixir:elixir_external_toolchain
+          build --platforms=//platforms:erlang_external_platform
+          build --extra_execution_platforms=//platforms:erlang_external_platform
         EOF
     #! - name: Setup tmate session
     #!   uses: mxschmitt/action-tmate@v3

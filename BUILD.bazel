@@ -5,6 +5,7 @@ load(
 load("@rules_erlang//:dialyze.bzl", "plt")
 load("@rules_erlang//:shell.bzl", "shell")
 load("@rules_erlang//:erl_eval.bzl", "erl_eval")
+load("//bazel/elixir:iex_eval.bzl", "iex_eval")
 load(":rabbitmq_home.bzl", "rabbitmq_home")
 load(":rabbitmq_run.bzl", "rabbitmq_run", "rabbitmq_run_command")
 load(":rabbitmqctl.bzl", "rabbitmqctl")
@@ -81,8 +82,14 @@ shell(
 
 erl_eval(
     name = "otp_version",
-    outs = ["actual_version.txt"],
+    outs = ["otp_version.txt"],
     expression = """{ok, Version} = file:read_file(filename:join([code:root_dir(), "releases", erlang:system_info(otp_release), "OTP_VERSION"])), file:write_file(os:getenv("OUTS"), Version), halt().""",
+)
+
+iex_eval(
+    name = "elixir_version",
+    outs = ["elixir_version.txt"],
+    expression = """File.write!(System.get_env("OUTS"), System.version()); System.halt()""",
 )
 
 package_generic_unix(PLUGINS)

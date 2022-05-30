@@ -66,14 +66,18 @@ jobs:
 
             build:buildbuddy --remote_download_toplevel
 
-            build --extra_toolchains=@otp_${{ steps.load-info.outputs.otp_major }}//:erlang_toolchain
-            build --extra_toolchains=@elixir_${{ steps.load-info.outputs.elixir }}//:elixir_toolchain
+            build:rbe --platforms=//bazel/platforms:erlang_${{ steps.load-info.outputs.otp_major }}_platform
+            build:rbe --extra_execution_platforms=//bazel/platforms:erlang_${{ steps.load-info.outputs.otp_major }}_platform
           EOF
 
-      - name: Check for otp version match
+      - name: Check for otp & elixir version exact match
         run: |
           bazelisk build :otp_version --config=rbe
-          if [ ! "$(cat bazel-bin/actual_version.txt)" == "${{ steps.load-info.outputs.otp }}" ]; then
+          if [ ! "$(cat bazel-bin/otp_version.txt)" == "${{ steps.load-info.outputs.otp }}" ]; then
+            exit 1
+          fi
+          bazelisk build :elixir_version --config=rbe
+          if [ ! "$(cat bazel-bin/elixir_version.txt)" == "${{ steps.load-info.outputs.elixir }}" ]; then
             exit 1
           fi
 

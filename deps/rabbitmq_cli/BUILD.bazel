@@ -7,9 +7,10 @@ load("//:rabbitmq.bzl", "STARTS_BACKGROUND_BROKER_TAG")
 # Note: All the various rabbitmq-* scripts are just copies of rabbitmqctl
 rabbitmqctl(
     name = "rabbitmqctl",
-    srcs = glob([
+    srcs = [
         "mix.exs",
         "config/config.exs",
+    ] + glob([
         "lib/**/*.ex",
     ]),
     visibility = ["//visibility:public"],
@@ -43,9 +44,10 @@ rabbitmq_run(
 rabbitmqctl_test(
     name = "rabbitmqctl_tests",
     size = "large",
-    srcs = glob([
+    srcs = [
         "mix.exs",
         "config/config.exs",
+    ] + glob([
         "lib/**/*.ex",
         "test/**/*.exs",
     ]),

@@ -7,12 +7,6 @@ jobs:
   test-erlang-git:
     name: Test (Erlang Git Master)
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-        - erlang_version: git_master
-          elixir_version: 1.13.4
     timeout-minutes: 120
     steps:
     - name: CHECKOUT REPOSITORY
@@ -36,8 +30,8 @@ jobs:
           build:buildbuddy --color=yes
           build:buildbuddy --disk_cache=
 
-          build --extra_toolchains=@otp_${{ matrix.erlang_version }}//:erlang_toolchain
-          build --extra_toolchains=@elixir_${{ matrix.elixir_version }}//:elixir_toolchain
+          build:rbe --platforms=//bazel/platforms:erlang_git_master_platform
+          build:rbe --extra_execution_platforms=//bazel/platforms:erlang_git_master_platform
         EOF
 
         bazelisk info release
