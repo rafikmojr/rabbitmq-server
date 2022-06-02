@@ -209,6 +209,7 @@ erlang_package.hex_package(
 erlang_package.hex_package(
     name = "seshat",
     version = "0.3.2",
+    sha256 = "20d820acbeef9d07298ee863d0c9d06f8e620acba100939ebb2925e4d6b0dfc7",
 )
 
 erlang_package.hex_package(
