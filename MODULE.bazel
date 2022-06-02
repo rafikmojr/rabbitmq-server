@@ -333,6 +333,9 @@ elixir.hex_package(
     name = "temp",
     version = "0.4.7",
     sha256 = "6af19e7d6a85a427478be1021574d1ae2a1e1b90882586f06bde76c63cd03e0d",
+    deps = [
+        "@hex//:elixir_app",
+    ],
 )
 
 elixir.hex_package(
