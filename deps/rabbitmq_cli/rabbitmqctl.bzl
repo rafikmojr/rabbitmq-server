@@ -67,7 +67,6 @@ export ERL_LIBS=${{DEPS_DIR}}
 cd $(dirname {mix_exs})
 
 export ERL_COMPILER_OPTIONS=deterministic
-"${{ABS_ELIXIR_HOME}}"/bin/mix local.hex --force
 "${{ABS_ELIXIR_HOME}}"/bin/mix compile --no-deps-check
 "${{ABS_ELIXIR_HOME}}"/bin/mix escript.build --no-deps-check
 

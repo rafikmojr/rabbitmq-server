@@ -17,6 +17,7 @@ rabbitmqctl(
     deps = [
         "//deps/rabbit_common:erlang_app",
         "@csv//:elixir_app",
+        "@hex//:elixir_app",
         "@json//:elixir_app",
         "@observer_cli//:erlang_app",
         "@stdout_formatter//:erlang_app",
@@ -61,6 +62,7 @@ rabbitmqctl_test(
         "//deps/rabbit_common:erlang_app",
         "@amqp//:elixir_app",
         "@csv//:elixir_app",
+        "@hex//:elixir_app",
         "@json//:elixir_app",
         "@observer_cli//:erlang_app",
         "@stdout_formatter//:erlang_app",

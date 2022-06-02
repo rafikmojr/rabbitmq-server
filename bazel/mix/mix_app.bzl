@@ -79,7 +79,6 @@ export ERL_LIBS=${{DEPS_DIR}}
 cd $(dirname {mix_exs})
 
 export ERL_COMPILER_OPTIONS=deterministic
-${{ABS_ELIXIR_HOME}}/bin/mix local.hex --force
 ${{ABS_ELIXIR_HOME}}/bin/mix compile --no-deps-check
 
 if [ -n "$(ls ${{MIX_BUILD_PATH}}/lib/{app_name}/consolidated)" ]; then

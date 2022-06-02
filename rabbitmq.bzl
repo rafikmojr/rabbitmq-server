@@ -27,14 +27,6 @@ STARTS_BACKGROUND_BROKER_TAG = "starts-background-broker"
 
 MIXED_VERSION_CLUSTER_TAG = "mixed-version-cluster"
 
-# ERLANG_INSTALLATIONS = [
-#     "@otp_24.3.4//:erlang_installation",
-#     "@otp_23.3.4.14//:erlang_installation",
-# ]
-
-# ERLANG_24_INSTALLATION = ERLANG_INSTALLATIONS[0]
-# ERLANG_23_INSTALLATION = ERLANG_INSTALLATIONS[1]
-
 RABBITMQ_ERLC_OPTS = DEFAULT_ERLC_OPTS + [
     "-DINSTR_MOD=gm",
 ]

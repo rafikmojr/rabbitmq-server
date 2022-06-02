@@ -64,7 +64,6 @@ INITIAL_DIR=${{PWD}}
 cd ${{TEST_UNDECLARED_OUTPUTS_DIR}}
 
 export ERL_COMPILER_OPTIONS=deterministic
-"${{ABS_ELIXIR_HOME}}"/bin/mix local.hex --force
 # "${{ABS_ELIXIR_HOME}}"/bin/mix deps.get dialyxir
 # "${{ABS_ELIXIR_HOME}}"/bin/mix dialyzer --no-deps-check
 "${{ABS_ELIXIR_HOME}}"/bin/mix compile --no-deps-check

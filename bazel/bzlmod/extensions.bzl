@@ -1,4 +1,8 @@
 load(
+    "@bazel_tools//tools/build_defs/repo:git.bzl",
+    "new_git_repository",
+)
+load(
     "@rules_erlang//:hex_archive.bzl",
     "hex_archive",
 )
@@ -15,7 +19,20 @@ def _merge_package(props, packages):
             return packages
     return packages + [props]
 
+def _hex():
+    new_git_repository(
+        name = "hex",
+        remote = "https://github.com/hexpm/hex.git",
+        tag = "v1.0.1",
+        build_file_content = MIX_PACKAGE_BUILD_FILE_CONTENT.format(
+            name = "hex",
+            deps = [],
+        ),
+    )
+
 def _impl(ctx):
+    _hex()
+
     hex_packages = []
     for mod in ctx.modules:
         for package in mod.tags.hex_package:
@@ -67,7 +84,7 @@ filegroup(
     name = "srcs",
     srcs = glob([
         "mix.exs",
-        "lib/**/*.ex",
+        "lib/**/*",
     ]),
     visibility = ["//visibility:public"],
 )
