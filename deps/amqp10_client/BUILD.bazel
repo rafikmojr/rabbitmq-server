@@ -59,7 +59,7 @@ rabbitmq_app(
     deps = DEPS,
 )
 
-xref(tags = ["xref"])
+xref()
 
 plt(
     name = "base_plt",
@@ -70,7 +70,6 @@ plt(
 
 dialyze(
     plt = ":base_plt",
-    tags = ["dialyze"],
 )
 
 broker_for_integration_suites(

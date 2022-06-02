@@ -110,7 +110,6 @@ xref(
     additional_libs = [
         "@ranch//:erlang_app",
     ],
-    tags = ["xref"],
 )
 
 plt(
@@ -125,7 +124,6 @@ plt(
 
 dialyze(
     plt = ":base_plt",
-    tags = ["dialyze"],
     warnings_as_errors = False,
 )
 
