@@ -315,27 +315,18 @@ elixir.hex_package(
     name = "json",
     version = "1.4.1",
     sha256 = "9abf218dbe4ea4fcb875e087d5f904ef263d012ee5ed21d46e9dbca63f053d16",
-    deps = [
-        "@hex//:elixir_app",
-    ],
 )
 
 elixir.hex_package(
     name = "parallel_stream",
     version = "1.0.6",
     sha256 = "639b2e8749e11b87b9eb42f2ad325d161c170b39b288ac8d04c4f31f8f0823eb",
-    deps = [
-        "@hex//:elixir_app",
-    ],
 )
 
 elixir.hex_package(
     name = "temp",
     version = "0.4.7",
     sha256 = "6af19e7d6a85a427478be1021574d1ae2a1e1b90882586f06bde76c63cd03e0d",
-    deps = [
-        "@hex//:elixir_app",
-    ],
 )
 
 elixir.hex_package(

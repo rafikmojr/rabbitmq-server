@@ -52,7 +52,7 @@ def _impl(ctx):
         if props["build_file_content"] == "":
             props["build_file_content"] = MIX_PACKAGE_BUILD_FILE_CONTENT.format(
                 name = name,
-                deps = deps,
+                deps = deps + ["@hex//:elixir_app"],
             )
         hex_archive(
             package_name = name,
