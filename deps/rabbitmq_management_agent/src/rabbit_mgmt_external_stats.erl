@@ -350,25 +350,16 @@ flatten_key({A, B}) ->
     list_to_atom(atom_to_list(A) ++ "_" ++ atom_to_list(B)).
 
 cluster_links() ->
-    {ok, Items} = net_kernel:nodes_info(),
-    [Link || Item <- Items,
-             Link <- [format_nodes_info(Item)], Link =/= undefined].
+    Match = {'connection', '$1', '_', '_', '$2', '$3', '_', '_', '_', 'normal', '_', '_', '_'},
+    search_items(ets:match(sys_dist, Match), []).
 
-format_nodes_info({Node, Info}) ->
-    Owner = proplists:get_value(owner, Info),
-    case catch process_info(Owner, links) of
-        {links, Links} ->
-            case [Link || Link <- Links, is_port(Link)] of
-                [Port] ->
-                    {Node, Owner, format_nodes_info1(Port)};
-                _ ->
-                    undefined
-            end;
-        _ ->
-            undefined
-    end.
+search_items([], Acc) ->
+    Acc;
+search_items([[Node, Owner, Port]| Rest], Acc0) ->
+    Acc1 = [{Node, Owner, format_port(Port)} | Acc0],
+    search_items(Rest, Acc1).
 
-format_nodes_info1(Port) ->
+format_port(Port) ->
     case {rabbit_net:socket_ends(Port, inbound),
           rabbit_net:getstat(Port, [recv_oct, send_oct])} of
         {{ok, {PeerAddr, PeerPort, SockAddr, SockPort}}, {ok, Stats}} ->
