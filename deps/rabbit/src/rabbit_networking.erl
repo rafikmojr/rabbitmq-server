@@ -23,6 +23,7 @@
          start_ssl_listener/3, start_ssl_listener/4,
          stop_tcp_listener/1, on_node_down/1, active_listeners/0,
          node_listeners/1, node_client_listeners/1,
+         node_distribution_listeners/1,
          register_connection/1, unregister_connection/1,
          register_non_amqp_connection/1, unregister_non_amqp_connection/1,
          connections/0, non_amqp_connections/0, connection_info_keys/0,
@@ -384,6 +385,12 @@ active_listeners() ->
 
 node_listeners(Node) ->
     mnesia:dirty_read(rabbit_listener, Node).
+
+-spec node_distribution_listeners(node()) -> [rabbit_types:listener()].
+
+node_distribution_listeners(Node) ->
+    MatchSpec = {listener, Node, clustering, '_', '_', '_', '_'},
+    mnesia:dirty_match_object(rabbit_listener, MatchSpec).
 
 -spec node_client_listeners(node()) -> [rabbit_types:listener()].
 

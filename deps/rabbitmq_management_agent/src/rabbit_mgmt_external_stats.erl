@@ -350,13 +350,22 @@ flatten_key({A, B}) ->
     list_to_atom(atom_to_list(A) ++ "_" ++ atom_to_list(B)).
 
 cluster_links() ->
+    % Note: sys_dist ETS table is defined and used here in the Erlang/OTP source:
+    % lib/kernel/src/net_kernel.erl
+    %
+    % The table structure has been consistent back to version 23.0 at least.
     Match = {'connection', '$1', '_', '_', '$2', '$3', '_', '_', '_', 'normal', '_', '_', '_'},
     search_items(ets:match(sys_dist, Match), []).
 
 search_items([], Acc) ->
     Acc;
-search_items([[Node, Owner, Port]| Rest], Acc0) ->
-    Acc1 = [{Node, Owner, format_port(Port)} | Acc0],
+search_items([[Node, Owner, Ctrlr]| Rest], Acc0) ->
+    Acc1 = case is_port(Ctrlr) of
+        true ->
+            [{Node, Owner, format_port(Ctrlr)} | Acc0];
+        false ->
+            [{Node, Owner, get_info(Node)} | Acc0]
+    end,
     search_items(Rest, Acc1).
 
 format_port(Port) ->
@@ -372,6 +381,30 @@ format_port(Port) ->
         _ ->
             []
     end.
+
+get_info(Node) ->
+    % In this case, proto_tls is being used for distribution. Navigating
+    % to the correct port via the maze of process links is impossible,
+    % so we make do with net_kernel:node_info/1 and our internal dist listener tracking.
+    % The values for SockPort and PeerPort may not be correct due to how dist connections
+    % were established, but the stats for each will be correct.
+    {SockAddr, SockPort} = case rabbit_networking:node_distribution_listeners(Node) of
+                               [] ->
+                                   % This is the case when a transient node is connected,
+                                   % like rabbitmqctl or via remsh
+                                   {{0,0,0,0}, 0};
+                               [{listener, Node, clustering, _LocalHostName, SAddr, SPort, _Opts}] ->
+                                   {SAddr, SPort}
+                           end,
+    {ok, Info} = net_kernel:node_info(Node),
+    PeerAddress = proplists:get_value(address, Info),
+    {net_address, {PeerAddr, PeerPort}, _PeerHostName, _, inet} = PeerAddress,
+    [{peer_addr, maybe_ntoab(PeerAddr)},
+     {peer_port, PeerPort},
+     {sock_addr, maybe_ntoab(SockAddr)},
+     {sock_port, SockPort},
+     {recv_bytes, proplists:get_value(in, Info) * 1024},
+     {send_bytes, proplists:get_value(out, Info) * 1024}].
 
 maybe_ntoab(A) when is_tuple(A) -> list_to_binary(rabbit_misc:ntoab(A));
 maybe_ntoab(H)                  -> H.
