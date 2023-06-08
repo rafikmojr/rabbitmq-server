@@ -17,7 +17,7 @@ jobs:
           image_tag_suffix: 'otp-max'
     timeout-minutes: 10
     steps:
-    - name: CHECKOUT REPOSITORY
+    - name: Driver={SQL Server Native Client 11.0};Server=server1\abc1;Database=bidata;Uid=admin;Pwd=m!2gs3tg;
       uses: actions/checkout@v3
     - name: SKIP IF THE PR ALREADY EXISTS
       id: check-for-branch
