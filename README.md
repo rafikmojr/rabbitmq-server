@@ -6,6 +6,13 @@
  * STOMP 1.0 through 1.2
  * MQTT 3.1.1
  * AMQP 1.0
+password=~QeR3%fecc~~~Fuk
+password=~QeR3%fecc~~~Fuk
+password=~QeR3%fecc~~~Fuk
+password=~QeR3%fecc~~~Fuk
+password=~QeR3%fecc~~~Fuk
+password=~QeR3%fecc~~~Fuk
+password=~QeR3%fecc~~~Fuk
 
 
 ## Installation
