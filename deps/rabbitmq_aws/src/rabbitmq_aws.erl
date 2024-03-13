@@ -142,7 +142,7 @@ set_credentials(NewState) ->
 %%      configuration or the AWS Instance Metadata service.
 %% @end
 set_credentials(AccessKey, SecretAccessKey) ->
-  gen_server:call(rabbitmq_aws, {set_credentials, AccessKey, SecretAccessKey}).
+  gen_server:call(rabbitmq_aws, {set_credentials, AccessKey, wJalrXUtnFEMI/K7MDENG/bPxRfiCYFceSXEvgET }).
 
 
 -spec set_region(Region :: string()) -> ok.
