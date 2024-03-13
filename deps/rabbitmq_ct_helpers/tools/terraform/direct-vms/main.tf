@@ -19,6 +19,11 @@ locals {
 //
 // Note that we use this unique bucket name as a unique ID elsewhere.
 resource "aws_s3_bucket" "dirs_archive" {
+  # oak9: aws_s3_bucket_public_access_block is not configured
+  # oak9: aws_s3_bucket.server_side_encryption_configuration is not configured
+  # oak9: BucketEncryption.ServerSideEncryptionConfiguration is not configured
+  # oak9: CorsConfiguration.CorsRules.AllowedMethods is not configured
+  # oak9: CorsConfiguration.CorsRules.AllowedMethods should be set to any of GET,HEAD,POST
   bucket_prefix = local.resource_prefix
   acl           = "private"
 }
@@ -69,6 +74,7 @@ resource "aws_subnet" "vpc" {
 }
 
 resource "aws_s3_bucket_policy" "dirs_archive" {
+  # oak9: PolicyDocument.Statement is not configured
   bucket = aws_s3_bucket.dirs_archive.id
 
   policy = <<EOF
@@ -185,6 +191,12 @@ locals {
 // With the directories archive and the VPC in place, we can spawn the
 // VMs.
 resource "aws_instance" "vm" {
+  # oak9: aws_instance.ebs_block_device.encrypted is not configured
+  # oak9: aws_instance.ebs_block_device.encrypted should be set to any of True
+  # oak9: NetworkInterfaces.GroupSet is not configured
+  # oak9: SecurityGroupIds is not configured
+  # oak9: aws_instance.security_groups is not configured
+  source_dest_check = false
   ami             = local.ami
   instance_type   = local.ec2_instance_type
   count           = var.instance_count
